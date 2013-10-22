@@ -290,7 +290,11 @@ to attach them to the start of each source file to most effectively
 convey the exclusion of warranty; and each file should have at least
 the "copyright" line and a pointer to where the full notice is found.
 
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> e4c9c9a4dee001d76c28263e0acdd32c43162111
     Copyright (C) 2013  MovieArchiver
 
     This program is free software; you can redistribute it and/or modify
@@ -336,4 +340,5 @@ This General Public License does not permit incorporating your program into
 proprietary programs.  If your program is a subroutine library, you may
 consider it more useful to permit linking proprietary applications with the
 library.  If this is what you want to do, use the GNU Lesser General
+
 Public License instead of this License.
