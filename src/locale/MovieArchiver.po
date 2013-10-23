@@ -1,0 +1,70 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MovieArchiver\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-10-22 22:43+0200\n"
+"PO-Revision-Date: 2013-10-22 22:43+0100\n"
+"Last-Translator: Sebastian\n"
+"Language-Team: svox <svox>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+
+#: MovieArchiverView.py:61
+msgid "Enabled"
+msgstr "Aktiv"
+
+#: MovieArchiverView.py:62 MovieArchiverView.py:65
+msgid "-------------------------------------------------------------"
+msgstr ""
+
+#: MovieArchiverView.py:63
+msgid "Movie Folder"
+msgstr "Movie Verzeichnis"
+
+#: MovieArchiverView.py:64
+msgid "Movie Folder Limit (in GB)"
+msgstr "Movie Festplatten Limit (in GB)"
+
+#: MovieArchiverView.py:64
+msgid ""
+"Movie Folder free diskspace limit in GB. If free diskspace reach under this "
+"limit, the MovieArchiver will move old records to the archive"
+msgstr ""
+
+#: MovieArchiverView.py:66
+#, fuzzy
+msgid "Archive Movie Folder"
+msgstr "Movie Archivierungsverzeichnis"
+
+#: MovieArchiverView.py:67
+#, fuzzy
+msgid "Archive Movie Folder Limit (in GB)"
+msgstr "Movie Archiv-Festplatten Limit (in GB)"
+
+#: MovieArchiverView.py:67
+msgid "If limit is reach, no movies will anymore moved to the archive"
+msgstr ""
+
+#: MovieArchiverView.py:102
+#, python-format
+msgid ""
+"The directory %s is not writable.\n"
+"Make sure you select a writable directory instead."
+msgstr ""
+"Das Verzeichnis %s ist nicht beschreibar.\n"
+"Bitte wählen Sie ein beschreibares Verzeichnis aus."
+
+#: MovieArchiverView.py:183
+msgid "Choose folder"
+msgstr "Verzeichnis auswählen"
+
+#: plugin.py:63
+msgid "Configuration tool for MovieArchiver"
+msgstr ""

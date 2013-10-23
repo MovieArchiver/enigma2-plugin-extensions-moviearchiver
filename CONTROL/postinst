@@ -1,0 +1,15 @@
+#!/bin/sh
+echo "                                                    "
+echo "                                                    "
+echo "	             MovieArchiver                        "
+echo "                    by                              "
+echo "   		         svox                             "
+echo "                                                    "
+echo "                                                    "
+echo "        Plugin successfully installed!              "
+echo "                                                    "
+echo "          Please restart enigma2 now.		          "
+echo "                                                    "
+echo "                                                    "
+echo "                                                    "
+exit 0

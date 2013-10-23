@@ -1,0 +1,10 @@
+#!/bin/sh
+rm -rf /usr/lib/enigma2/python/Plugins/Extensions/MovieArchiver
+echo "                                                    "
+echo "	             MovieArchiver                        "
+echo "                    by                              "
+echo "   		         svox                             "
+echo "                                                    "
+echo "                                                    "
+echo "        Plugin successfully installed!              "
+echo "                                                    "

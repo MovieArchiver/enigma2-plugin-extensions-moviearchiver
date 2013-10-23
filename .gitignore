@@ -1,5 +1,9 @@
 *.py[cod]
 
+# OS Files
+.DS_Store
+psd/
+
 # C extensions
 *.so
 
@@ -26,9 +30,6 @@ pip-log.txt
 .coverage
 .tox
 nosetests.xml
-
-# Translations
-*.mo
 
 # Mr Developer
 .mr.developer.cfg

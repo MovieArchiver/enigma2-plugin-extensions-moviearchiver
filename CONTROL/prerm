@@ -1,0 +1,7 @@
+#!/bin/sh
+echo "                                                          "
+echo "                                                          "
+echo "        ...MovieArchiver successful removed.              "
+echo "             Please restart enigma2 now.		            "
+echo "                                                          "
+echo "                                                          "
