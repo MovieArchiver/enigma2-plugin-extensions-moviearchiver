@@ -57,6 +57,7 @@ class MovieManager(object):
 
         if mountpoint(config.plugins.MovieArchiver.sourcePath.value) == mountpoint(config.plugins.MovieArchiver.targetPath.value):
             printToConsole("Stop Archiving!! We can't archive movies to the same hard drive!! Please change the paths in the MovieArchiver settings")
+            return
 
         if(reachedLimit(config.plugins.MovieArchiver.sourcePath.value, config.plugins.MovieArchiver.sourceLimit.value) and not reachedLimit(config.plugins.MovieArchiver.targetPath.value, config.plugins.MovieArchiver.targetLimit.value)):
             files = getFiles(config.plugins.MovieArchiver.sourcePath.value, MOVIE_EXTENSION_TO_ARCHIVE)
@@ -64,7 +65,7 @@ class MovieManager(object):
                 for file in files:
                     moviesFileSize += os.path.getsize(file) / 1024 / 1024
 
-                    # check if its enough that we move only this on file
+                    # check if its enough that we move only this file
                     breakMoveNext = checkReachedLimitIfMoveFile(config.plugins.MovieArchiver.sourcePath.value, config.plugins.MovieArchiver.sourceLimit.value, moviesFileSize)
 
                     self.addMovieToArchiveQue(file)
