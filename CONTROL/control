@@ -1,10 +1,10 @@
-Package: enigma2-plugin-moviearchiver
+Package: enigma2-plugin-extensions-moviearchiver
 Version: 1.0-20131022-r0
 Section: extra
 Priority: optional
 Maintainer: svox
 Architecture: mips32el
-OE: enigma2-plugin-moviearchiver
+OE: enigma2-plugin-extensions-moviearchiver
 Description: Enigma2 Movie Archiver by svox
 Homepage: https://github.com/MovieArchiver/
 Source: https://github.com/MovieArchiver/
