@@ -58,7 +58,9 @@ class MovieArchiverView(ConfigListScreen, Screen):
         ConfigListScreen.__init__(
             self,
             [
-                getConfigListEntry(_("Enabled"), config.plugins.MovieArchiver.enabled),
+                getConfigListEntry(_("Archive automatically"), config.plugins.MovieArchiver.enabled),
+                getConfigListEntry(_("Skip archiving during records"), config.plugins.MovieArchiver.skipDuringRecords),
+                getConfigListEntry(_("Show notification if 'Archive Movie Folder Limit' is reached"), config.plugins.MovieArchiver.showLimitReachedNotification),
                 getConfigListEntry(_("-------------------------------------------------------------"), ),
                 getConfigListEntry(_("Movie Folder"), config.plugins.MovieArchiver.sourcePath),
                 getConfigListEntry(_("Movie Folder Limit (in GB)"), config.plugins.MovieArchiver.sourceLimit, _("Movie Folder free diskspace limit in GB. If free diskspace reach under this limit, the MovieArchiver will move old records to the archive")),

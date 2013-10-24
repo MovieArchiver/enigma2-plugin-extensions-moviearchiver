@@ -36,8 +36,7 @@ def getOldestFile(path, fileExtension=None):
     if not files:
         return None
 
-    if fileExtension is not None:
-        files = filter(lambda s: s.endswith(fileExtension), files)
+    files = filterFileListByFileExtension(files, fileExtension)
 
     oldestFile = min(files, key=os.path.getmtime)
 
@@ -56,14 +55,18 @@ def getFiles(path, fileExtension=None):
     if not files:
         return None
 
-    if fileExtension is not None:
-        files = filter(lambda s: s.endswith(fileExtension), files)
+    files = filterFileListByFileExtension(files, fileExtension)
 
     files.sort(key=lambda s: os.path.getmtime(os.path.join(path, s)))
     return files
 
 def getFilesFromPath(path):
     return [os.path.join(path, fname) for fname in os.listdir(path)]
+
+def filterFileListByFileExtension(files, fileExtension):
+    if fileExtension is not None:
+        files = filter(lambda s: s.endswith(fileExtension), files)
+    return files
 
 def pathIsWriteable(path):
     if os.path.isfile(path):

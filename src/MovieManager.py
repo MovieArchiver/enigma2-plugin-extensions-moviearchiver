@@ -24,13 +24,21 @@
 
 import os
 
+from time import time
 from pipes import quote
 from _collections import deque
 from enigma import eConsoleAppContainer
+import NavigationInstance
+from Tools import Notifications
+from Screens.MessageBox import MessageBox
 
 from Components.config import config
 from DiskUtils import pathIsWriteable, reachedLimit, getFiles, checkReachedLimitIfMoveFile, mountpoint
 from . import printToConsole
+
+
+# if in x secs a record starts, dont archive movies
+SECONDS_NEXT_RECORD = 600 #10 mins
 
 # max tries (movies to move) after checkFreespace recursion will end
 MAX_TRIES = 30
@@ -56,7 +64,18 @@ class MovieManager(object):
         breakMoveNext = False
 
         if mountpoint(config.plugins.MovieArchiver.sourcePath.value) == mountpoint(config.plugins.MovieArchiver.targetPath.value):
-            printToConsole("Stop Archiving!! We can't archive movies to the same hard drive!! Please change the paths in the MovieArchiver settings")
+            printToConsole("Stop archiving!! Can't archive movies to the same hard drive!! Please change the paths in the MovieArchiver settings")
+            return
+
+        if config.plugins.MovieArchiver.skipDuringRecords.value and self.isRecordingStartInNextTime():
+            printToConsole("Skip archiving. A record is running or start in the next minutes.")
+            return
+
+        if reachedLimit(config.plugins.MovieArchiver.targetPath.value, config.plugins.MovieArchiver.targetLimit.value):
+            if config.plugins.MovieArchiver.showLimitReachedNotification.value:
+                Notifications.AddNotification(MessageBox, _("Stop archiving! Can't archive movie because archive-harddisk limit reached!\n"), type=MessageBox.TYPE_INFO, timeout=20)
+
+            printToConsole("Stop archiving! Can't archive movie because archive-harddisk limit reached!")
             return
 
         if(reachedLimit(config.plugins.MovieArchiver.sourcePath.value, config.plugins.MovieArchiver.sourceLimit.value) and not reachedLimit(config.plugins.MovieArchiver.targetPath.value, config.plugins.MovieArchiver.targetLimit.value)):
@@ -117,4 +136,13 @@ class MovieManager(object):
             self.moveCommand = ""
 
             self.executionQueueList = deque()
+
+    def isRecordingStartInNextTime(self):
+        recordings = len(NavigationInstance.instance.getRecordings())
+        nextRecordingTime = NavigationInstance.instance.RecordTimer.getNextRecordingTime()
+
+        if not recordings and (((nextRecordingTime - time()) > SECONDS_NEXT_RECORD) or nextRecordingTime < 0):
+            return False
+        else:
+            return True
 

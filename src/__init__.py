@@ -38,6 +38,8 @@ def printToConsole(msg):
 # Define Settings Entries
 config.plugins.MovieArchiver = ConfigSubsection()
 config.plugins.MovieArchiver.enabled = ConfigYesNo(default = False)
+config.plugins.MovieArchiver.skipDuringRecords = ConfigYesNo(default = True)
+config.plugins.MovieArchiver.showLimitReachedNotification = ConfigYesNo(default = True)
 
 # default hdd
 default = resolveFilename(SCOPE_HDD)
