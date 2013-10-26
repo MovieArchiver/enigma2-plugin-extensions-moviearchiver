@@ -33,7 +33,7 @@ class RecordNotification():
 
 	def startTimer(self):
 		self.forceBindRecordTimer = eTimer()
-		self.forceBindRecordTimer.callback.append(self.begin)
+		self.forceBindRecordTimer.callback.append(self.__begin)
 
 		if self.isActive():
 			self.forceBindRecordTimer.stop()
@@ -43,11 +43,11 @@ class RecordNotification():
 		printToConsole("[RecordNotification] startTimer")
 
 	def stopTimer(self):
-		self.end()
+		self.__end()
 
 		if self.forceBindRecordTimer is not None:
 			self.forceBindRecordTimer.stop()
-			self.forceBindRecordTimer.callback.remove(self.begin)
+			self.forceBindRecordTimer.callback.remove(self.__begin)
 			self.forceBindRecordTimer = None
 
 		printToConsole("[RecordNotification] stopTimer")
@@ -57,24 +57,29 @@ class RecordNotification():
 			return True
 		return False
 
-	def begin(self):
+
+	'''
+	Private Methods
+	'''
+
+	def __begin(self):
 		if NavigationInstance.instance:
-			if self.onRecordEvent not in NavigationInstance.instance.RecordTimer.on_state_change:
+			if self.__onRecordEvent not in NavigationInstance.instance.RecordTimer.on_state_change:
 				printToConsole("add RecordNotification")
 				# Append callback function
-				NavigationInstance.instance.RecordTimer.on_state_change.append(self.onRecordEvent)
+				NavigationInstance.instance.RecordTimer.on_state_change.append(self.__onRecordEvent)
 		else:
 			# Try again later
 			self.forceBindRecordTimer.startLongTimer(1)
 
-	def end(self):
+	def __end(self):
 		if NavigationInstance.instance:
 			# Remove callback function
-			if self.onRecordEvent in NavigationInstance.instance.RecordTimer.on_state_change:
+			if self.__onRecordEvent in NavigationInstance.instance.RecordTimer.on_state_change:
 				printToConsole("remove RecordNotification")
-				NavigationInstance.instance.RecordTimer.on_state_change.remove(self.onRecordEvent)
+				NavigationInstance.instance.RecordTimer.on_state_change.remove(self.__onRecordEvent)
 
-	def onRecordEvent(self, timer):
+	def __onRecordEvent(self, timer):
 		if timer.justplay:
 			pass
 

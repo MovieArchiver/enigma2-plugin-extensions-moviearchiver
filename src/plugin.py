@@ -27,7 +27,7 @@ import sys, traceback
 
 from MovieArchiverView import MovieArchiverView
 from NotificationController import NotificationController
-from . import printToConsole
+from . import _, printToConsole
 
 notificationController = None
 

@@ -1,0 +1,190 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MovieArchiver\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-10-26 00:20+0100\n"
+"PO-Revision-Date: 2013-10-26 00:23+0100\n"
+"Last-Translator: Sebastian\n"
+"Language-Team: svox <svox>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: /Users/sebastian/Projekte/MovieArchiver/src\n"
+"X-Poedit-SearchPath-0: /Users/sebastian/Projekte/MovieArchiver/src\n"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:69
+msgid "Archive automatically"
+msgstr "Automatisch Archivieren"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:69
+msgid ""
+"If yes, the MovieArchiver automatically moved or copied (if 'Backup Movies' "
+"is on) movies to archive folder if limit is reached"
+msgstr ""
+"Filme werden automatisch auf die Archiv-Festplatte verschoben oder kopiert "
+"(wenn 'Backup Movies' an ist) sobald das Limit der Festplatte erreicht wurde"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:70
+msgid "Backup Movies instead of Archive"
+msgstr "Backup Movies anstatt sie zu Archivieren"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:70
+msgid ""
+"If yes, the movies will only be copy to the archive movie folder and not "
+"moved.\n"
+"\n"
+"Currently for synchronize, it comparing only fileName and fileSize."
+msgstr ""
+"Wenn aktiviert werden Filme auf die Archiv-Festplatte kopiert und nicht "
+"verschoben\n"
+"\n"
+"Zum synchronisieren wird derzeit nur der Dateiname und die Dateigröße "
+"verglichen."
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:71
+msgid "Skip archiving during records"
+msgstr "Während einer Aufnahme nicht Archivieren"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:71
+msgid ""
+"If a record is in progress or start in the next minutes after a record, the "
+"archiver skipped till the next record"
+msgstr ""
+"Wenn eine Aufnahme läuft oder in nächster Zeit startet, wird der "
+"Archivierungsprozess übersprungen bis die nächste Aufnahme beendet wurde"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:72
+msgid "Show notification if 'Archive movie folder Limit' is reached"
+msgstr ""
+"Benachrichtigung anzeigen wenn 'Movie Archiv-Festplatten Limit' erreicht "
+"wurde"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:72
+msgid ""
+"Show notification window message if 'Archive Movie Folder Limit' is reached"
+msgstr ""
+"Benachrichtigung anzeigen wenn 'Movie Archiv-Festplatten Limit' erreicht "
+"wurde"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:73
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:76
+msgid "-------------------------------------------------------------"
+msgstr ""
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:74
+msgid "Movie Folder"
+msgstr "Movie Verzeichnis"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:74
+msgid ""
+"Source folder / HDD\n"
+"\n"
+"Press Ok to open path selection view"
+msgstr ""
+"Quellverzeichnis bzw. Festplatte\n"
+"\n"
+"Ok drücken um Verzeichnisbrowser zu öffnen"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:75
+msgid "Movie Folder Limit (in GB)"
+msgstr "Movie Festplatten Limit (in GB)"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:75
+msgid ""
+"Movie Folder free diskspace limit in GB. If free diskspace reach under this "
+"limit, the MovieArchiver will move old records to the archive"
+msgstr ""
+"Movie Verzeichnis freier Festplatten Limit in GB. Sollte der freie "
+"Festplattenplatz unter dieses Limit geraten, wird der MovieArchiver die "
+"ältesten Movies in das Archiv verschieben"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:77
+msgid "Archive Folder"
+msgstr "Archivverzeichnis"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:77
+msgid ""
+"Target folder / HDD where the movies will moved or backupd.\n"
+"\n"
+"Press Ok to open path selection view"
+msgstr ""
+"Zielverzeichnis bzw. Festplatte. An diesem Ort werden die Filme verschobene "
+"oder dupliziert\n"
+"\n"
+"Ok drücken um Verzeichnisbrowser zu öffnen"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:78
+msgid "Archive Folder Limit (in GB)"
+msgstr "Archiv-Festplatte Limit (in GB)"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:78
+msgid "If limit is reach, no movies will anymore moved to the archive"
+msgstr ""
+"Wenn das angegebene Limit erreicht wurde, wird kein Movie mehr archiviert"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:111
+#, python-format
+msgid ""
+"The directory %s is not writable.\n"
+"Make sure you select a writable directory instead."
+msgstr ""
+"Das Verzeichnis %s ist nicht beschreibar.\n"
+"Bitte wählen Sie ein beschreibares Verzeichnis aus."
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:168
+msgid "Choose folder"
+msgstr "Verzeichnis auswählen"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:71
+msgid ""
+"Stop archiving!! Can't archive movies to the same hard drive!! Please change "
+"the paths in the MovieArchiver settings."
+msgstr ""
+"Archivierung abgebrochen!! Die Archivierung kann nicht auf der gleichen "
+"Festplatte gestartet werden. Bitte geben Sie einen anderen Pfad in den "
+"MovieArchiver-Einstellungen  an."
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:74
+msgid "Skip archiving. A record is running or start in the next minutes."
+msgstr ""
+"Archivierung wird übersprungen da gerade eine Aufnahme läuft oder in den "
+"nächsten Minuten startet."
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:77
+msgid ""
+"Stop archiving! Can't archive movie because archive-harddisk limit reached!"
+msgstr ""
+"Archivierung konnte nicht gestartet werden weil das Limit des Movie Archivs "
+"erreicht wurde!"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:88
+msgid "Backup Archive. Synchronization started"
+msgstr "Backup Archiv. Synchronisierung wurde gestartet."
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:108
+msgid "limit not reached. Wait for next Event."
+msgstr "Limit noch nicht erreicht. Warte auf nächstes Event."
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/NotificationController.py:108
+msgid "MovieArchiver: Archiving finished."
+msgstr "MovieArchiver: Archivierung abgeschlossen."
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/NotificationController.py:110
+msgid "MovieArchiver: No movies to archive found."
+msgstr "MovieArchiver: Es wurden keine Filme zum archivieren gefunden."
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/plugin.py:63
+msgid "Configuration tool for MovieArchiver"
+msgstr ""
+
+#~ msgid "Enabled"
+#~ msgstr "Aktiv"

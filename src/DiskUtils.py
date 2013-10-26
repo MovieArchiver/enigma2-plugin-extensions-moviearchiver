@@ -23,39 +23,38 @@
 
 import os
 
-###############################
 
-def getOldestFile(path, fileExtension=None):
+def getOldestFile(path, fileExtensions=None):
     '''
     get oldest file from folder
 
-    fileExtensions example: .txt (with .)
+    fileExtensions as tuple. example: ('.txt', '.png')
     '''
     files = getFilesFromPath(path)
 
     if not files:
         return None
 
-    files = filterFileListByFileExtension(files, fileExtension)
+    files = __filterFileListByFileExtension(files, fileExtensions)
 
     oldestFile = min(files, key=os.path.getmtime)
 
     return oldestFile
 
-def getFiles(path, fileExtension=None):
+def getFiles(path, fileExtensions=None):
     '''
     get file list as an array
     sorted by date.
     The oldest first
 
-    fileExtensions example: .txt (with .)
+    fileExtensions as tuple. example: ('.txt', '.png')
     '''
     files = getFilesFromPath(path)
 
     if not files:
         return None
 
-    files = filterFileListByFileExtension(files, fileExtension)
+    files = __filterFileListByFileExtension(files, fileExtensions)
 
     files.sort(key=lambda s: os.path.getmtime(os.path.join(path, s)))
     return files
@@ -63,10 +62,13 @@ def getFiles(path, fileExtension=None):
 def getFilesFromPath(path):
     return [os.path.join(path, fname) for fname in os.listdir(path)]
 
-def filterFileListByFileExtension(files, fileExtension):
-    if fileExtension is not None:
-        files = filter(lambda s: s.endswith(fileExtension), files)
-    return files
+def getFilesWithNameKey(path):
+    rs = {}
+    for fileName in os.listdir(path):
+        file = os.path.join(path, fileName)
+        if os.path.isfile(file):
+            rs[fileName] = file
+    return rs
 
 def pathIsWriteable(path):
     if os.path.isfile(path):
@@ -119,5 +121,60 @@ def checkReachedLimitIfMoveFile(path, limit, moviesFileSize):
     else:
         return False
 
+def getFileHash(file, factor=10, sizeToSkip=104857600):
+    '''
+    factor, if size is higher, it is faster but need more ram
+    sizeToSkip 104857600 = 100mb
+    '''
+    # currently, we check only the fileSize because opening
+    # files and creating hash are to slow
+    return str(os.stat(file).st_size)
 
-###############################
+    '''
+    filehash = hashlib.md5()
+
+    # this size will stored in ram. and not the whole file
+    blockSizeToRead = filehash.block_size * (2**factor)
+
+    # we only want this 5mb for creating an md5 string
+    sizeToRead = 5242880
+
+    f = open(file, 'rb')
+    f.seek(sizeToSkip, 0)
+
+    totalSize = 0
+    while (True):
+        readData = f.read(blockSizeToRead)
+
+        if not readData:
+            if totalSize == 0:
+                f.seek(0, 0)
+                continue
+            else:
+                break
+
+        totalSize += blockSizeToRead
+
+        if totalSize > sizeToRead:
+            break
+
+        filehash.update(readData)
+
+    hashStr = filehash.hexdigest()
+    f.close()
+    return hashStr
+    '''
+
+
+    '''
+    Private Methods
+    '''
+
+def __filterFileListByFileExtension(files, fileExtensions):
+    '''
+    fileExtensions as tuple. example: ('.txt', '.png')
+    '''
+    if fileExtensions is not None:
+        files = filter(lambda s: s.lower().endswith(fileExtensions), files)
+        #files = filter(lambda s: s.endswith(fileExtension), files)
+    return files

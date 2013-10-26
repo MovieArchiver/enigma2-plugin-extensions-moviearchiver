@@ -30,7 +30,8 @@ def hasEventListener(eventType, function):
     return False
 
 def addEventListener(eventType, function):
-    handler.append([eventType, function])
+    if hasEventListener(eventType, function) == False:
+        handler.append([eventType, function])
 
 def removeEventListener(eventType, function):
     for e in handler:

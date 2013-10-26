@@ -1,32 +1,49 @@
+# -*- coding: UTF-8 -*-
+#######################################################################
+#
+#    MovieArchiver
+#    Copyright (C) 2013 by svox
+#
+#    In case of reuse of this source code please do not remove this copyright.
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    For more information on the GNU General Public License see:
+#    <http://www.gnu.org/licenses/>.
+#
+#######################################################################
 
 from Components.config import config, configfile, ConfigSubsection, getConfigListEntry, ConfigSelection, ConfigNumber, ConfigText, ConfigInteger, ConfigYesNo
-from Tools.Directories import resolveFilename, SCOPE_HDD, SCOPE_LANGUAGE, SCOPE_PLUGINS
-from Screens.CCcamInfo import TranslationHelper
+from Tools.Directories import resolveFilename, SCOPE_HDD, SCOPE_PLUGINS
 
-from os import environ
 from Components.Language import language
-import gettext, sys, traceback
+import gettext
 
 #############################################################
 
 # Gettext
-lang = language.getLanguage()
-environ["LANGUAGE"] = lang[:2]
-gettext.bindtextdomain("enigma2", resolveFilename(SCOPE_LANGUAGE))
-gettext.textdomain("enigma2")
-gettext.bindtextdomain("MovieArchiver", "%s%s" % (resolveFilename(SCOPE_PLUGINS), "locale/"))
+
+PluginLanguageDomain = "MovieArchiver"
+PluginLanguagePath = "Extensions/MovieArchiver/locale"
+
+def localeInit():
+    gettext.bindtextdomain(PluginLanguageDomain, resolveFilename(SCOPE_PLUGINS, PluginLanguagePath))
 
 def _(txt):
-    t = gettext.dgettext("MovieArchiver", txt)
-    if t == txt:
-        t = gettext.gettext(txt)
-    return t
+    if gettext.dgettext(PluginLanguageDomain, txt):
+        return gettext.dgettext(PluginLanguageDomain, txt)
+    else:
+        return gettext.gettext(txt)
 
-def translateBlock(block):
-    for x in TranslationHelper:
-        if block.__contains__(x[0]):
-            block = block.replace(x[0], x[1])
-    return block
+language.addCallback(localeInit())
 
 #############################################################
 
@@ -38,6 +55,7 @@ def printToConsole(msg):
 # Define Settings Entries
 config.plugins.MovieArchiver = ConfigSubsection()
 config.plugins.MovieArchiver.enabled = ConfigYesNo(default = False)
+config.plugins.MovieArchiver.backup = ConfigYesNo(default = False)
 config.plugins.MovieArchiver.skipDuringRecords = ConfigYesNo(default = True)
 config.plugins.MovieArchiver.showLimitReachedNotification = ConfigYesNo(default = True)
 
@@ -57,8 +75,22 @@ config.plugins.MovieArchiver.targetPath.lastValue = config.plugins.MovieArchiver
 # interval
 config.plugins.MovieArchiver.targetLimit = ConfigNumber(default=30)
 
+#############################################################
+# Helper Functions
+def getSourcePath():
+    return config.plugins.MovieArchiver.sourcePath
+
+def getSourcePathValue():
+    return getSourcePath().value
+
+
+def getTargetPath():
+    return config.plugins.MovieArchiver.targetPath
+
+def getTargetPathValue():
+    return getTargetPath().value
 
 #############################################################
 
 
-__all__ = ['_', 'config']
+__all__ = ['_', 'config', 'printToConsole', 'getSourcePath', 'getSourcePathValue', 'getTargetPath', 'getTargetPathValue']

@@ -26,20 +26,26 @@ from Screens.MessageBox import MessageBox
 from Components.ActionMap import ActionMap
 from Components.config import config, configfile, getConfigListEntry
 from Components.ConfigList import ConfigListScreen
+from Components.Sources.StaticText import StaticText
+
 from DiskUtils import pathIsWriteable
 from NotificationController import NotificationController
+from . import _, getSourcePath, getTargetPath, printToConsole
 
 
 #######################################################################
 
 class MovieArchiverView(ConfigListScreen, Screen):
     skin = """
-  <screen name="MovieArchiver-Setup" position="center,center" size="600,440" flags="wfNoBorder" backgroundColor="#90000000">
-    <eLabel name="new eLabel" position="0,0" zPosition="-2" size="600,440" backgroundColor="#20000000" transparent="0" />
+  <screen name="MovieArchiver-Setup" position="center,center" size="1000,440" flags="wfNoBorder" backgroundColor="#90000000">
+    <eLabel name="new eLabel" position="0,0" zPosition="-2" size="630,440" backgroundColor="#20000000" transparent="0" />
     <eLabel font="Regular; 20" foregroundColor="unffffff" backgroundColor="#20000000" halign="left" position="37,405" size="250,33" text="Cancel" transparent="1" />
     <eLabel font="Regular; 20" foregroundColor="unffffff" backgroundColor="#20000000" halign="left" position="235,405" size="250,33" text="Save" transparent="1" />
     <eLabel font="Regular; 20" foregroundColor="unffffff" backgroundColor="#20000000" halign="left" position="442,405" size="250,33" text="Archive now!" transparent="1" />
-    <widget name="config" position="21,74" size="540,300" scrollbarMode="showOnDemand" transparent="1" />
+    <widget name="config" position="21,74" size="570,300" scrollbarMode="showOnDemand" transparent="1" />
+    <eLabel name="new eLabel" position="640,0" zPosition="-2" size="360,440" backgroundColor="#20000000" transparent="0" />
+    <widget source="help" render="Label" position="660,74" size="320,400" font="Regular;20" />
+    <eLabel position="660,15" size="360,50" text="Help" font="Regular; 40" valign="center" transparent="1" backgroundColor="#20000000" />
     <eLabel position="20,15" size="348,50" text="MovieArchiver" font="Regular; 40" valign="center" transparent="1" backgroundColor="#20000000" />
     <eLabel position="303,18" size="349,50" text="Setup" foregroundColor="unffffff" font="Regular; 30" valign="center" backgroundColor="#20000000" transparent="1" halign="left" />
     <eLabel position="425,400" size="5,40" backgroundColor="#e5dd00" />
@@ -52,25 +58,30 @@ class MovieArchiverView(ConfigListScreen, Screen):
     def __init__(self, session, args = None):
         Screen.__init__(self, session)
 
-        config.plugins.MovieArchiver.sourcePath.addNotifier(self.checkReadWriteDir, initial_call=False, immediate_feedback=False)
-        config.plugins.MovieArchiver.targetPath.addNotifier(self.checkReadWriteDir, initial_call=False, immediate_feedback=False)
+        getSourcePath().addNotifier(self.checkReadWriteDir, initial_call=False, immediate_feedback=False)
+        getTargetPath().addNotifier(self.checkReadWriteDir, initial_call=False, immediate_feedback=False)
+
+        self.onChangedEntry = []
 
         ConfigListScreen.__init__(
             self,
             [
-                getConfigListEntry(_("Archive automatically"), config.plugins.MovieArchiver.enabled),
-                getConfigListEntry(_("Skip archiving during records"), config.plugins.MovieArchiver.skipDuringRecords),
-                getConfigListEntry(_("Show notification if 'Archive Movie Folder Limit' is reached"), config.plugins.MovieArchiver.showLimitReachedNotification),
+                getConfigListEntry(_("Archive automatically"), config.plugins.MovieArchiver.enabled, _("If yes, the MovieArchiver automatically moved or copied (if 'Backup Movies' is on) movies to archive folder if limit is reached")),
+                getConfigListEntry(_("Backup Movies instead of Archive"), config.plugins.MovieArchiver.backup, _("If yes, the movies will only be copy to the archive movie folder and not moved.\n\nCurrently for synchronize, it comparing only fileName and fileSize.")),
+                getConfigListEntry(_("Skip archiving during records"), config.plugins.MovieArchiver.skipDuringRecords, _("If a record is in progress or start in the next minutes after a record, the archiver skipped till the next record")),
+                getConfigListEntry(_("Show notification if 'Archive movie folder Limit' is reached"), config.plugins.MovieArchiver.showLimitReachedNotification, _("Show notification window message if 'Archive Movie Folder Limit' is reached")),
                 getConfigListEntry(_("-------------------------------------------------------------"), ),
-                getConfigListEntry(_("Movie Folder"), config.plugins.MovieArchiver.sourcePath),
+                getConfigListEntry(_("Movie Folder"), getSourcePath(), _("Source folder / HDD\n\nPress Ok to open path selection view")),
                 getConfigListEntry(_("Movie Folder Limit (in GB)"), config.plugins.MovieArchiver.sourceLimit, _("Movie Folder free diskspace limit in GB. If free diskspace reach under this limit, the MovieArchiver will move old records to the archive")),
                 getConfigListEntry(_("-------------------------------------------------------------"), ),
-                getConfigListEntry(_("Archive Movie Folder"), config.plugins.MovieArchiver.targetPath),
-                getConfigListEntry(_("Archive Movie Folder Limit (in GB)"), config.plugins.MovieArchiver.targetLimit, _("If limit is reach, no movies will anymore moved to the archive")),
+                getConfigListEntry(_("Archive Folder"), getTargetPath(), _("Target folder / HDD where the movies will moved or backupd.\n\nPress Ok to open path selection view")),
+                getConfigListEntry(_("Archive Folder Limit (in GB)"), config.plugins.MovieArchiver.targetLimit, _("If limit is reach, no movies will anymore moved to the archive"))
             ],
             session = session,
-            on_change = self.changed
+            on_change = self.__changedEntry
         )
+
+        NotificationController.getInstance().setView(self)
 
         # Define Actions
         self["actions"] = ActionMap(["SetupActions", "ColorActions"],
@@ -82,6 +93,12 @@ class MovieArchiverView(ConfigListScreen, Screen):
             }, -2
         )
 
+        self["config"].onSelectionChanged.append(self.__updateHelp)
+        self["help"] = StaticText()
+
+        self.onClose.append(self.__onClose)
+
+    # callback for path-browser
     def checkReadWriteDir(self, configElement):
         if pathIsWriteable(configElement.getValue()):
             configElement.lastValue = configElement.getValue()
@@ -96,18 +113,15 @@ class MovieArchiverView(ConfigListScreen, Screen):
             )
             return False
 
-    def changed(self):
-        pass
-
     def ok(self):
         cur = self.getCurrent()
-        if cur == config.plugins.MovieArchiver.sourcePath or cur == config.plugins.MovieArchiver.targetPath:
+        if cur == getSourcePath() or cur == getTargetPath():
             self.chooseDestination()
         else:
             ConfigListScreen.keyOK(self)
 
     def yellow(self):
-        NotificationController.getInstance().startArchiving()
+        NotificationController.getInstance().startArchiving(True)
 
     def cancel(self):
         for x in self["config"].list:
@@ -155,4 +169,21 @@ class MovieArchiverView(ConfigListScreen, Screen):
             self.getCurrent().value,
             minFree = 100 # Same requirement as in Screens.TimerEntry
         )
+
+
+    '''
+    Private Methods
+    '''
+
+    def __updateHelp(self):
+        cur = self["config"].getCurrent()
+        if cur:
+            self["help"].text = cur[2]
+
+    # for summary:
+    def __changedEntry(self):
+        pass
+
+    def __onClose(self):
+        NotificationController.getInstance().setView(None)
 

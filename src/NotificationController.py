@@ -22,11 +22,12 @@
 #######################################################################
 
 from Components.config import config
-from MovieManager import MovieManager
+from MovieManager import MovieManager, QUEUE_FINISHED
 from RecordNotification import RecordNotification, RECORD_FINISHED
 from EventDispatcher import addEventListener, removeEventListener, hasEventListener
+from Screens.MessageBox import MessageBox
 from . import printToConsole
-
+from Tools import Notifications
 
 class NotificationController(object):
     '''
@@ -38,6 +39,7 @@ class NotificationController(object):
         '''
         Constructor
         '''
+        self.view = None
         self.movieManager = MovieManager()
         self.recordNotification = RecordNotification()
 
@@ -47,22 +49,63 @@ class NotificationController(object):
             NotificationController.instance = NotificationController()
         return NotificationController.instance
 
+    def setView(self, view):
+        self.view = view
+
+    def getView(self):
+        return self.view
+
     def start(self):
         if config.plugins.MovieArchiver.enabled.value:
             if self.recordNotification.isActive() == False:
-                if hasEventListener(RECORD_FINISHED, self.recordFinished) == False:
-                    addEventListener(RECORD_FINISHED, self.recordFinished)
+                if hasEventListener(RECORD_FINISHED, self.__recordFinished) == False:
+                    addEventListener(RECORD_FINISHED, self.__recordFinished)
                 self.recordNotification.startTimer()
 
     def stop(self):
-        removeEventListener(RECORD_FINISHED, self.recordFinished)
+        removeEventListener(RECORD_FINISHED, self.__recordFinished)
         self.recordNotification.stopTimer()
 
-    def recordFinished(self):
+    def startArchiving(self, showUIMessage = False):
+        if showUIMessage == True:
+            addEventListener(QUEUE_FINISHED, self.__queueFinished)
+        else:
+            removeEventListener(QUEUE_FINISHED, self.__queueFinished)
+
+        try:
+            self.movieManager.checkFreespace()
+        except Exception, e:
+            if showUIMessage == True:
+                if e.args is not None and len(e.args) > 0:
+                    # MessageBox.TYPE_ERROR
+                    if len(e.args) > 1:
+                        timeout = e.args[1]
+                    else:
+                        timeout = 10
+
+                    self.showMessage(e.args[0], timeout)
+                else:
+                    printToConsole("startArchiving (yellow) Exception: " + str(e))
+            else:
+                printToConsole("startArchiving Exception: " + str(e))
+
+    def showMessage(self, msg, timeout=10):
+        if self.view is not None:
+            self.view.session.open(MessageBox, msg, MessageBox.TYPE_INFO, timeout)
+        else:
+            Notifications.AddNotification(MessageBox, msg, type=MessageBox.TYPE_INFO, timeout=timeout)
+
+    '''
+    Private Methods
+    '''
+
+    def __recordFinished(self):
         printToConsole("recordFinished")
         self.startArchiving()
 
-    def startArchiving(self):
-        printToConsole("startArchiving")
-        self.movieManager.checkFreespace()
+    def __queueFinished(self, hasArchiveMovies):
+        if hasArchiveMovies == True:
+            self.showMessage(_("MovieArchiver: Archiving finished."), 5)
+        else:
+            self.showMessage(_("MovieArchiver: No movies to archive found."), 5)
 
