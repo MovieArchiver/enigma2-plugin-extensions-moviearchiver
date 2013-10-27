@@ -42,7 +42,7 @@ class MovieArchiverView(ConfigListScreen, Screen):
     <eLabel font="Regular; 20" foregroundColor="unffffff" backgroundColor="#20000000" halign="left" position="37,405" size="250,33" text="Cancel" transparent="1" />
     <eLabel font="Regular; 20" foregroundColor="unffffff" backgroundColor="#20000000" halign="left" position="235,405" size="250,33" text="Save" transparent="1" />
     <eLabel font="Regular; 20" foregroundColor="unffffff" backgroundColor="#20000000" halign="left" position="442,405" size="250,33" text="Archive now!" transparent="1" />
-    <widget name="config" position="21,74" size="570,300" scrollbarMode="showOnDemand" transparent="1" />
+    <widget name="config" position="21,74" size="590,300" scrollbarMode="showOnDemand" transparent="1" />
     <eLabel name="new eLabel" position="640,0" zPosition="-2" size="360,440" backgroundColor="#20000000" transparent="0" />
     <widget source="help" render="Label" position="660,74" size="320,400" font="Regular;20" />
     <eLabel position="660,15" size="360,50" text="Help" font="Regular; 40" valign="center" transparent="1" backgroundColor="#20000000" />
