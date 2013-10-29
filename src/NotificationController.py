@@ -107,5 +107,5 @@ class NotificationController(object):
         if hasArchiveMovies == True:
             self.showMessage(_("MovieArchiver: Archiving finished."), 5)
         else:
-            self.showMessage(_("MovieArchiver: No movies to archive found."), 5)
+            self.showMessage(_("MovieArchiver: Movies already archived."), 5)
 

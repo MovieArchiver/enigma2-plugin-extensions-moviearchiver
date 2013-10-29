@@ -23,7 +23,6 @@
 #######################################################################
 
 import os
-import datetime
 
 from time import time
 from pipes import quote
@@ -46,7 +45,7 @@ SECONDS_NEXT_RECORD = 600 #10 mins
 MAX_TRIES = 30
 
 # file extension to archive or backup
-MOVIE_EXTENSION_TO_ARCHIVE = (".ts", ".avi", ".mkv", ".mp4")
+MOVIE_EXTENSION_TO_ARCHIVE = (".ts", ".avi", ".mkv", ".mp4", ".iso")
 
 class MovieManager(object):
     '''
@@ -127,22 +126,30 @@ class MovieManager(object):
         for sFileName,sFile in sourceFiles.iteritems():
             if sFileName not in targetFiles:
                 printToConsole("file is new. Add To Archive: " + sFile)
-                self.addFileToArchiveQueue(sFile)
+                self.addFileToBackupQueue(sFile)
             else:
                 tFile = targetFiles[sFileName]
                 if getFileHash(tFile) != getFileHash(sFile):
                     printToConsole("file is different. Add to Archive: " + sFile)
-                    self.addFileToArchiveQueue(sFile)
+                    self.addFileToBackupQueue(sFile)
 
         if len(self.executionQueueList) < 1:
             dispatchEvent(QUEUE_FINISHED, False)
         else:
             self.execQueue()
 
-    def addFileToArchiveQueue(self, sourceFile):
+    def addFileToBackupQueue(self, sourceFile):
         targetPath = getTargetPathValue()
         if os.path.isdir(targetPath) and os.path.dirname(sourceFile) != targetPath and pathIsWriteable(targetPath):
-            newExecCommand = 'cp "'+ sourceFile +'" "'+ targetPath +'"'
+            subFolderPath = sourceFile.replace(getSourcePathValue(), "")
+            targetPathWithSubFolder = os.path.join(targetPath, subFolderPath)
+
+            newExecCommand = 'cp "'+ sourceFile +'" "'+ targetPathWithSubFolder +'"'
+
+            # create folders if doesnt exists
+            folder = os.path.dirname(targetPathWithSubFolder)
+            if os.path.exists(folder) == False:
+                os.makedirs(folder)
 
             self.__addExecCommandToArchiveQueue(newExecCommand)
 

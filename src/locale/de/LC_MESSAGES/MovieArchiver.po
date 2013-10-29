@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MovieArchiver\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-26 00:20+0100\n"
-"PO-Revision-Date: 2013-10-26 00:23+0100\n"
+"POT-Creation-Date: 2013-10-29 11:01+0100\n"
+"PO-Revision-Date: 2013-10-29 11:01+0100\n"
 "Last-Translator: Sebastian\n"
 "Language-Team: svox <svox>\n"
 "Language: de\n"
@@ -63,10 +63,8 @@ msgstr ""
 "Archivierungsprozess übersprungen bis die nächste Aufnahme beendet wurde"
 
 #: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:72
-msgid "Show notification if 'Archive movie folder Limit' is reached"
-msgstr ""
-"Benachrichtigung anzeigen wenn 'Movie Archiv-Festplatten Limit' erreicht "
-"wurde"
+msgid "Show notification if archive limit reached"
+msgstr "Fenster anzeigen wenn Archiv Limit erreicht wurde"
 
 #: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:72
 msgid ""
@@ -144,7 +142,7 @@ msgstr ""
 msgid "Choose folder"
 msgstr "Verzeichnis auswählen"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:71
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:70
 msgid ""
 "Stop archiving!! Can't archive movies to the same hard drive!! Please change "
 "the paths in the MovieArchiver settings."
@@ -153,24 +151,24 @@ msgstr ""
 "Festplatte gestartet werden. Bitte geben Sie einen anderen Pfad in den "
 "MovieArchiver-Einstellungen  an."
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:74
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:73
 msgid "Skip archiving. A record is running or start in the next minutes."
 msgstr ""
 "Archivierung wird übersprungen da gerade eine Aufnahme läuft oder in den "
 "nächsten Minuten startet."
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:77
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:76
 msgid ""
 "Stop archiving! Can't archive movie because archive-harddisk limit reached!"
 msgstr ""
 "Archivierung konnte nicht gestartet werden weil das Limit des Movie Archivs "
 "erreicht wurde!"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:88
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:87
 msgid "Backup Archive. Synchronization started"
 msgstr "Backup Archiv. Synchronisierung wurde gestartet."
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:108
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:107
 msgid "limit not reached. Wait for next Event."
 msgstr "Limit noch nicht erreicht. Warte auf nächstes Event."
 
@@ -179,8 +177,8 @@ msgid "MovieArchiver: Archiving finished."
 msgstr "MovieArchiver: Archivierung abgeschlossen."
 
 #: /Users/sebastian/Projekte/MovieArchiver/src/NotificationController.py:110
-msgid "MovieArchiver: No movies to archive found."
-msgstr "MovieArchiver: Es wurden keine Filme zum archivieren gefunden."
+msgid "MovieArchiver: Movies already archived."
+msgstr "MovieArchiver: Filme sind bereits archiviert."
 
 #: /Users/sebastian/Projekte/MovieArchiver/src/plugin.py:63
 msgid "Configuration tool for MovieArchiver"

@@ -1,10 +1,10 @@
 Package: enigma2-plugin-extensions-moviearchiver
-Version: 0.2
+Version: 0.2a
 Section: extra
 Priority: optional
 Maintainer: svox
 Architecture: mips32el
 OE: enigma2-plugin-extensions-moviearchiver
-Description: Enigma2 Movie Archiver by svox
+Description: Archive or Backup your Movielist automatically. MovieArchiver by svox
 Homepage: https://github.com/MovieArchiver/
 Source: https://github.com/MovieArchiver/

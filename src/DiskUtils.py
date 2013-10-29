@@ -63,11 +63,14 @@ def getFilesFromPath(path):
     return [os.path.join(path, fname) for fname in os.listdir(path)]
 
 def getFilesWithNameKey(path):
+    '''
+    get recursive all files from given path
+    '''
     rs = {}
-    for fileName in os.listdir(path):
-        file = os.path.join(path, fileName)
-        if os.path.isfile(file):
-            rs[fileName] = file
+    for dirName, dirNames, fileNames in os.walk(path):
+        for fileName in fileNames:
+            rs[os.path.join(dirName.replace(path, ""), fileName)] = os.path.join(dirName, fileName)
+
     return rs
 
 def pathIsWriteable(path):
