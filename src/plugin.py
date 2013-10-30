@@ -45,6 +45,7 @@ def autostart(reason, **kwargs):
 			printToConsole("Autostart exception " + str(e))
 			exc_type, exc_value, exc_traceback = sys.exc_info()
 			traceback.print_exception(exc_type, exc_value, exc_traceback, file=sys.stdout)
+
 	# Shutdown
 	elif reason == 1:
 		# Stop NotificationController
@@ -59,7 +60,7 @@ def main(session, **kwargs):
 
 def Plugins(**kwargs):
 	pluginList = [
-		PluginDescriptor(where=PluginDescriptor.WHERE_AUTOSTART, fnc=autostart, needsRestart=False),
+		PluginDescriptor(where = PluginDescriptor.WHERE_AUTOSTART, fnc=autostart, needsRestart=False),
 		PluginDescriptor(name="MovieArchiver", description=_("Configuration tool for MovieArchiver"), where = PluginDescriptor.WHERE_PLUGINMENU, icon="plugin.png", fnc=main, needsRestart = False)
 	]
 	return pluginList

@@ -29,13 +29,6 @@ Zum Backup werden alle Dateien (es gibt keine Dateiendungs-Einschränkung) hinzu
 Deaktiviert kann der MovieArchiver auch manuel über die Einstellungsseite gestartet werden.
 
 
-
-Hinweise:
-- Es handelt sich um eine Beta Version. Getestet wurde das Plugin bisher NUR auf einer Gigablue Quad mit openATV. Ob andere Images und
-Receiver funktionieren ist daher nicht bekannt
-- Ob eingebundene Netzwerklaufwerke damit funktionieren ist ebenfalls bisher unbekannt
-
-
 Wichtig:
 - Nutzung des Scripts auf eigene Gefahr!
 
@@ -47,6 +40,10 @@ Zu Testen:
 	- bricht die Archivierung ab?
 - Wie ist das Verhalten auf anderen Receivern (bisher nur auf Gigablue Quad getestet)?
 
+
+Bisher getestet auf folgenden Images/Receivern:
+- openATV / Gigablue Quad
+- HDF / ET9000
 
 Screenshot:
 ![Screenshot](https://raw.github.com/MovieArchiver/enigma2-plugin-extensions-moviearchiver/master/screenshots/MovieArchiver.jpg)

@@ -64,12 +64,12 @@ default = resolveFilename(SCOPE_HDD)
 if config.movielist.videodirs.value and len(config.movielist.videodirs.value) > 0:
     default = config.movielist.videodirs.value[0]
 
-config.plugins.MovieArchiver.sourcePath = ConfigText(default = default)
+config.plugins.MovieArchiver.sourcePath = ConfigText(default = default, fixed_size=False, visible_width=30)
 config.plugins.MovieArchiver.sourcePath.lastValue = config.plugins.MovieArchiver.sourcePath.value
 
 config.plugins.MovieArchiver.sourceLimit = ConfigNumber(default=30)
 
-config.plugins.MovieArchiver.targetPath = ConfigText(default = default)
+config.plugins.MovieArchiver.targetPath = ConfigText(default = default, fixed_size=False, visible_width=30)
 config.plugins.MovieArchiver.targetPath.lastValue = config.plugins.MovieArchiver.targetPath.value
 
 # interval
