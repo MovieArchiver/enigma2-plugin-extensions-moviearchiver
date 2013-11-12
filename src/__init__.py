@@ -21,7 +21,7 @@
 #
 #######################################################################
 
-from Components.config import config, configfile, ConfigSubsection, getConfigListEntry, ConfigSelection, ConfigNumber, ConfigText, ConfigInteger, ConfigYesNo
+from Components.config import config, configfile, ConfigSubsection, getConfigListEntry, ConfigSelection, ConfigNumber, ConfigText, ConfigInteger, ConfigYesNo, ConfigLocations
 from Tools.Directories import resolveFilename, SCOPE_HDD, SCOPE_PLUGINS
 
 from Components.Language import language
@@ -54,23 +54,27 @@ def printToConsole(msg):
 
 # Define Settings Entries
 config.plugins.MovieArchiver = ConfigSubsection()
-config.plugins.MovieArchiver.enabled = ConfigYesNo(default = False)
-config.plugins.MovieArchiver.backup = ConfigYesNo(default = False)
-config.plugins.MovieArchiver.skipDuringRecords = ConfigYesNo(default = True)
-config.plugins.MovieArchiver.showLimitReachedNotification = ConfigYesNo(default = True)
+config.plugins.MovieArchiver.enabled = ConfigYesNo(default=False)
+config.plugins.MovieArchiver.backup = ConfigYesNo(default=False)
+config.plugins.MovieArchiver.skipDuringRecords = ConfigYesNo(default=True)
+config.plugins.MovieArchiver.showLimitReachedNotification = ConfigYesNo(default=True)
 
 # default hdd
-default = resolveFilename(SCOPE_HDD)
-if config.movielist.videodirs.value and len(config.movielist.videodirs.value) > 0:
-    default = config.movielist.videodirs.value[0]
+defaultDir = resolveFilename(SCOPE_HDD)
+if config.movielist.videodirs.getValue() and len(config.movielist.videodirs.getValue()) > 0:
+    defaultDir = config.movielist.videodirs.getValue()[0]
 
-config.plugins.MovieArchiver.sourcePath = ConfigText(default = default, fixed_size=False, visible_width=30)
-config.plugins.MovieArchiver.sourcePath.lastValue = config.plugins.MovieArchiver.sourcePath.value
+config.plugins.MovieArchiver.sourcePath = ConfigText(default=defaultDir, fixed_size=False, visible_width=30)
+config.plugins.MovieArchiver.sourcePath.lastValue = config.plugins.MovieArchiver.sourcePath.getValue()
 
 config.plugins.MovieArchiver.sourceLimit = ConfigNumber(default=30)
 
-config.plugins.MovieArchiver.targetPath = ConfigText(default = default, fixed_size=False, visible_width=30)
-config.plugins.MovieArchiver.targetPath.lastValue = config.plugins.MovieArchiver.targetPath.value
+
+# exclude folders
+config.plugins.MovieArchiver.excludeDirs = ConfigLocations(visible_width=30)
+
+config.plugins.MovieArchiver.targetPath = ConfigText(default=defaultDir, fixed_size=False, visible_width=30)
+config.plugins.MovieArchiver.targetPath.lastValue = config.plugins.MovieArchiver.targetPath.getValue()
 
 # interval
 config.plugins.MovieArchiver.targetLimit = ConfigNumber(default=30)
@@ -81,14 +85,14 @@ def getSourcePath():
     return config.plugins.MovieArchiver.sourcePath
 
 def getSourcePathValue():
-    return getSourcePath().value
+    return getSourcePath().getValue()
 
 
 def getTargetPath():
     return config.plugins.MovieArchiver.targetPath
 
 def getTargetPathValue():
-    return getTargetPath().value
+    return getTargetPath().getValue()
 
 #############################################################
 

@@ -24,13 +24,15 @@
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 from Components.ActionMap import ActionMap
-from Components.config import config, configfile, getConfigListEntry
+from Components.config import config, configfile, getConfigListEntry, ConfigLocations
 from Components.ConfigList import ConfigListScreen
 from Components.Sources.StaticText import StaticText
+from Components.FileList import MultiFileSelectList
 
 from DiskUtils import pathIsWriteable
 from NotificationController import NotificationController
-from . import _, getSourcePath, getTargetPath, printToConsole
+from . import _, getSourcePath, getSourcePathValue, getTargetPath, printToConsole
+from ExcludeDirsView import ExcludeDirsView
 
 
 #######################################################################
@@ -73,6 +75,7 @@ class MovieArchiverView(ConfigListScreen, Screen):
                 getConfigListEntry(_("-------------------------------------------------------------"), ),
                 getConfigListEntry(_("Movie Folder"), getSourcePath(), _("Source folder / HDD\n\nPress Ok to open path selection view")),
                 getConfigListEntry(_("Movie Folder Limit (in GB)"), config.plugins.MovieArchiver.sourceLimit, _("Movie Folder free diskspace limit in GB. If free diskspace reach under this limit, the MovieArchiver will move old records to the archive")),
+                getConfigListEntry(_("Movie Exclude Folders"),  config.plugins.MovieArchiver.excludeDirs, _("This Folders wont be archived or backupped.")),
                 getConfigListEntry(_("-------------------------------------------------------------"), ),
                 getConfigListEntry(_("Archive Folder"), getTargetPath(), _("Target folder / HDD where the movies will moved or backupd.\n\nPress Ok to open path selection view")),
                 getConfigListEntry(_("Archive Folder Limit (in GB)"), config.plugins.MovieArchiver.targetLimit, _("If limit is reach, no movies will anymore moved to the archive"))
@@ -84,7 +87,7 @@ class MovieArchiverView(ConfigListScreen, Screen):
         NotificationController.getInstance().setView(self)
 
         # Define Actions
-        self["actions"] = ActionMap(["SetupActions", "ColorActions"],
+        self["actions"] = ActionMap(["SetupActions", "OkCancelActions", "ColorActions"],
             {
                 "cancel": self.cancel,
                 "save": self.save,
@@ -113,15 +116,22 @@ class MovieArchiverView(ConfigListScreen, Screen):
             )
             return False
 
+    def yellow(self):
+        NotificationController.getInstance().startArchiving(True)
+
+    def excludedDirsChoosen(self, ret):
+        config.plugins.MovieArchiver.excludeDirs.save()
+        config.plugins.MovieArchiver.save()
+        #config.save()
+
     def ok(self):
         cur = self.getCurrent()
         if cur == getSourcePath() or cur == getTargetPath():
             self.chooseDestination()
+        elif cur == config.plugins.MovieArchiver.excludeDirs:
+            self.session.openWithCallback(self.excludedDirsChoosen, ExcludeDirsView)
         else:
             ConfigListScreen.keyOK(self)
-
-    def yellow(self):
-        NotificationController.getInstance().startArchiving(True)
 
     def cancel(self):
         for x in self["config"].list:
@@ -135,11 +145,16 @@ class MovieArchiverView(ConfigListScreen, Screen):
     def save(self):
         for x in self["config"].list:
             if len(x) > 1:
+                # skip ConfigLocations because it doesnt accept default = None
+                # All other forms override default and force to save values that
+                # wasnt changed by user
+                if isinstance(x[1], ConfigLocations) == False:
+                    x[1].default = None
                 x[1].save()
             else:
                 pass
 
-        if config.plugins.MovieArchiver.enabled.value:
+        if config.plugins.MovieArchiver.enabled.getValue():
             NotificationController.getInstance().start()
         else:
             NotificationController.getInstance().stop()
@@ -157,7 +172,7 @@ class MovieArchiverView(ConfigListScreen, Screen):
     def pathSelected(self, res):
         if res is not None:
             pathInput = self.getCurrent()
-            pathInput.value = res
+            pathInput.setValue(res)
 
     def chooseDestination(self):
         from Screens.LocationBox import MovieLocationBox
@@ -166,7 +181,7 @@ class MovieArchiverView(ConfigListScreen, Screen):
             self.pathSelected,
             MovieLocationBox,
             _("Choose folder"),
-            self.getCurrent().value,
+            self.getCurrent().getValue(),
             minFree = 100 # Same requirement as in Screens.TimerEntry
         )
 

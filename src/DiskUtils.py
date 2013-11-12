@@ -62,14 +62,37 @@ def getFiles(path, fileExtensions=None):
 def getFilesFromPath(path):
     return [os.path.join(path, fname) for fname in os.listdir(path)]
 
-def getFilesWithNameKey(path):
+def getFilesWithNameKey(path, excludedDirNames = None, excludeDirs = None):
     '''
     get recursive all files from given path
     '''
     rs = {}
-    for dirName, dirNames, fileNames in os.walk(path):
+    for dirPath, dirNames, fileNames in os.walk(path):
         for fileName in fileNames:
-            rs[os.path.join(dirName.replace(path, ""), fileName)] = os.path.join(dirName, fileName)
+            # skip, if dirname is found in excludedDirNames
+            if excludedDirNames is not None and os.path.basename(dirPath) in excludedDirNames:
+                continue
+
+            fullFilePath = os.path.join(dirPath, fileName)
+
+            skipFile = False;
+
+            if dirPath.endswith("/"):
+                pathToCheck = dirPath
+            else:
+                pathToCheck = dirPath + "/"
+
+            # skip, if path found in excludeDirs
+            if excludeDirs is not None:
+                for excludeDir in excludeDirs:
+                    if pathToCheck[:len(excludeDir)] == pathToCheck:
+                        skipFile = True
+                        break
+
+            if skipFile == True:
+                continue
+
+            rs[os.path.join(dirPath.replace(path, ""), fileName)] = fullFilePath
 
     return rs
 
@@ -88,6 +111,16 @@ def mountpoint(path, first=True):
     if first: path = os.path.realpath(path)
     if os.path.ismount(path) or len(path)==0: return path
     return mountpoint(os.path.dirname(path), False)
+
+
+def removeSymbolicLinks(pathList):
+    tmpExcludedDirs = []
+
+    for folder in pathList:
+        if os.path.islink(folder) == False:
+            tmpExcludedDirs.append(folder)
+
+    return tmpExcludedDirs
 
 ###############################
 
@@ -115,11 +148,10 @@ def reachedLimit(path, limit):
         return False
 
 def checkReachedLimitIfMoveFile(path, limit, moviesFileSize):
-    sourceHddFreeSpace = getFreeDiskspace(path)
+    freeDiskSpace = getFreeDiskspace(path)
     limitInMB = limit * 1024
-    # Debug Code
-    #print "[MovieArchiver] reachedLimitIfMoveFile sourceHddFreeSpace: " + str(sourceHddFreeSpace) + " moviesFileSize: " + str(moviesFileSize) + " limitInMB: " + str(limitInMB) + " ## " + str(sourceHddFreeSpace + moviesFileSize)
-    if (sourceHddFreeSpace + moviesFileSize) >= limitInMB:
+
+    if (freeDiskSpace + moviesFileSize) >= limitInMB:
         return True
     else:
         return False

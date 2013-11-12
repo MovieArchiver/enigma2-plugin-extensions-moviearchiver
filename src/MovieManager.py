@@ -41,11 +41,17 @@ QUEUE_FINISHED = "queueFinished"
 # if in x secs a record starts, dont archive movies
 SECONDS_NEXT_RECORD = 600 #10 mins
 
+# show message window: body is msg, timeout
+INFO_MSG = "showAlert"
+
 # max tries (movies to move) after checkFreespace recursion will end
 MAX_TRIES = 30
 
 # file extension to archive or backup
 MOVIE_EXTENSION_TO_ARCHIVE = (".ts", ".avi", ".mkv", ".mp4", ".iso")
+
+DEFAULT_EXCLUDED_DIRNAMES = [".Trash", "trashcan"]
+
 
 class MovieManager(object):
     '''
@@ -62,65 +68,83 @@ class MovieManager(object):
         self.console.appClosed.append(self.__runFinished)
 
     def checkFreespace(self):
-        tries = 0
-        moviesFileSize = 0
-        breakMoveNext = False
-
         if mountpoint(getSourcePathValue()) == mountpoint(getTargetPathValue()):
-            raise Exception(_("Stop archiving!! Can't archive movies to the same hard drive!! Please change the paths in the MovieArchiver settings."), 10)
+            dispatchEvent(INFO_MSG, _("Stop archiving!! Can't archive movies to the same hard drive!! Please change the paths in the MovieArchiver settings."), 10)
+            return
 
-        if config.plugins.MovieArchiver.skipDuringRecords.value and self.isRecordingStartInNextTime():
-            raise Exception(_("Skip archiving. A record is running or start in the next minutes."), 10)
+        if config.plugins.MovieArchiver.skipDuringRecords.getValue() and self.isRecordingStartInNextTime():
+            dispatchEvent(INFO_MSG, _("Skip archiving. A record is running or start in the next minutes."), 10)
+            return
 
-        if reachedLimit(getTargetPathValue(), config.plugins.MovieArchiver.targetLimit.value):
+        if reachedLimit(getTargetPathValue(), config.plugins.MovieArchiver.targetLimit.getValue()):
             msg = _("Stop archiving! Can't archive movie because archive-harddisk limit reached!")
 
             printToConsole(msg)
 
-            if config.plugins.MovieArchiver.showLimitReachedNotification.value:
-                raise Exception(msg, 20)
-            else:
-                return
+            if config.plugins.MovieArchiver.showLimitReachedNotification.getValue():
+                dispatchEvent(INFO_MSG, msg, 20)
 
-        if config.plugins.MovieArchiver.backup.value:
-            self.rsync(getSourcePathValue(), getTargetPathValue())
-            raise Exception(_("Backup Archive. Synchronization started"), 5)
+            return
 
-        if reachedLimit(getSourcePathValue(), config.plugins.MovieArchiver.sourceLimit.value):
+        if config.plugins.MovieArchiver.backup.getValue():
+            self.backupFiles(getSourcePathValue(), getTargetPathValue())
+        else:
+            self.archiveMovies()
+
+    def archiveMovies(self):
+        '''
+        archiving movies
+        '''
+
+        tries = 0
+        moviesFileSize = 0
+
+        if reachedLimit(getSourcePathValue(), config.plugins.MovieArchiver.sourceLimit.getValue()):
             files = getFiles(getSourcePathValue(), MOVIE_EXTENSION_TO_ARCHIVE)
             if files is not None:
                 for file in files:
                     moviesFileSize += os.path.getsize(file) / 1024 / 1024
 
-                    # check if its enough that we move only this file
-                    breakMoveNext = checkReachedLimitIfMoveFile(getSourcePathValue(), config.plugins.MovieArchiver.sourceLimit.value, moviesFileSize)
+                    # Source Disk: check if its enough that we move only this file
+                    breakMoveNext = checkReachedLimitIfMoveFile(getSourcePathValue(), config.plugins.MovieArchiver.sourceLimit.getValue(), moviesFileSize)
 
                     self.addMovieToArchiveQueue(file)
 
                     if breakMoveNext or tries > MAX_TRIES:
                         break
 
+                    # Target Disk: check if limit is reached if we move this file
+                    breakMoveNext = checkReachedLimitIfMoveFile(getTargetPathValue(), config.plugins.MovieArchiver.targetLimit.getValue(), moviesFileSize * -1)
+
+                    if breakMoveNext:
+                        break
+
                     tries += 1
 
+                dispatchEvent(INFO_MSG, _("Start archiving."), 5)
                 self.execQueue()
         else:
-            raise Exception(_("limit not reached. Wait for next Event."), 5)
+            dispatchEvent(INFO_MSG, _("limit not reached. Wait for next Event."), 5)
 
-    def rsync(self, sourcePath, targetPath):
+    def backupFiles(self, sourcePath, targetPath):
         '''
-        rsync
+        sync files
         '''
+
+        dispatchEvent(INFO_MSG, _("Backup Archive. Synchronization started"), 5)
 
         #check if target path is writable
         if pathIsWriteable(targetPath) == False:
+            dispatchEvent(INFO_MSG, _("Backup Target Folder is not writable.\nPlease check the permission."), 10)
             return
 
         #check if some files to archive available
-        sourceFiles = getFilesWithNameKey(sourcePath)
+        sourceFiles = getFilesWithNameKey(sourcePath, excludedDirNames = DEFAULT_EXCLUDED_DIRNAMES, excludeDirs = config.plugins.MovieArchiver.excludeDirs.getValue())
         if sourceFiles is None:
+            dispatchEvent(INFO_MSG, _("No files for backup found."), 10)
             return
 
-        targetFiles = getFilesWithNameKey(targetPath)
+        targetFiles = getFilesWithNameKey(targetPath, excludedDirNames = DEFAULT_EXCLUDED_DIRNAMES)
 
         # determine movies to sync and add to queue
         for sFileName,sFile in sourceFiles.iteritems():
