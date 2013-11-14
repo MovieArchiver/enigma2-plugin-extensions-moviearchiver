@@ -27,11 +27,10 @@ from Components.ActionMap import ActionMap
 from Components.config import config, configfile, getConfigListEntry, ConfigLocations
 from Components.ConfigList import ConfigListScreen
 from Components.Sources.StaticText import StaticText
-from Components.FileList import MultiFileSelectList
 
 from DiskUtils import pathIsWriteable
 from NotificationController import NotificationController
-from . import _, getSourcePath, getSourcePathValue, getTargetPath, printToConsole
+from . import _, getSourcePath, getTargetPath
 from ExcludeDirsView import ExcludeDirsView
 
 
@@ -67,19 +66,7 @@ class MovieArchiverView(ConfigListScreen, Screen):
 
         ConfigListScreen.__init__(
             self,
-            [
-                getConfigListEntry(_("Archive automatically"), config.plugins.MovieArchiver.enabled, _("If yes, the MovieArchiver automatically moved or copied (if 'Backup Movies' is on) movies to archive folder if limit is reached")),
-                getConfigListEntry(_("Backup Movies instead of Archive"), config.plugins.MovieArchiver.backup, _("If yes, the movies will only be copy to the archive movie folder and not moved.\n\nCurrently for synchronize, it comparing only fileName and fileSize.")),
-                getConfigListEntry(_("Skip archiving during records"), config.plugins.MovieArchiver.skipDuringRecords, _("If a record is in progress or start in the next minutes after a record, the archiver skipped till the next record")),
-                getConfigListEntry(_("Show notification if archive limit reached"), config.plugins.MovieArchiver.showLimitReachedNotification, _("Show notification window message if 'Archive Movie Folder Limit' is reached")),
-                getConfigListEntry(_("-------------------------------------------------------------"), ),
-                getConfigListEntry(_("Movie Folder"), getSourcePath(), _("Source folder / HDD\n\nPress Ok to open path selection view")),
-                getConfigListEntry(_("Movie Folder Limit (in GB)"), config.plugins.MovieArchiver.sourceLimit, _("Movie Folder free diskspace limit in GB. If free diskspace reach under this limit, the MovieArchiver will move old records to the archive")),
-                getConfigListEntry(_("Movie Exclude Folders"),  config.plugins.MovieArchiver.excludeDirs, _("This Folders wont be archived or backupped.")),
-                getConfigListEntry(_("-------------------------------------------------------------"), ),
-                getConfigListEntry(_("Archive Folder"), getTargetPath(), _("Target folder / HDD where the movies will moved or backupd.\n\nPress Ok to open path selection view")),
-                getConfigListEntry(_("Archive Folder Limit (in GB)"), config.plugins.MovieArchiver.targetLimit, _("If limit is reach, no movies will anymore moved to the archive"))
-            ],
+            self.getMenuItemList(),
             session = session,
             on_change = self.__changedEntry
         )
@@ -100,6 +87,25 @@ class MovieArchiverView(ConfigListScreen, Screen):
         self["help"] = StaticText()
 
         self.onClose.append(self.__onClose)
+
+    def getMenuItemList(self):
+        menuList = []
+        menuList.append(getConfigListEntry(_("Archive automatically"), config.plugins.MovieArchiver.enabled, _("If yes, the MovieArchiver automatically moved or copied (if 'Backup Movies' is on) movies to archive folder if limit is reached")))
+        menuList.append(getConfigListEntry(_("Backup Movies instead of Archive"), config.plugins.MovieArchiver.backup, _("If yes, the movies will only be copy to the archive movie folder and not moved.\n\nCurrently for synchronize, it comparing only fileName and fileSize.")))
+        menuList.append(getConfigListEntry(_("Skip archiving during records"), config.plugins.MovieArchiver.skipDuringRecords, _("If a record is in progress or start in the next minutes after a record, the archiver skipped till the next record")))
+        menuList.append(getConfigListEntry(_("Show notification if archive limit reached"), config.plugins.MovieArchiver.showLimitReachedNotification, _("Show notification window message if 'Archive Movie Folder Limit' is reached")))
+        menuList.append(getConfigListEntry(_("-------------------------------------------------------------"), ))
+        menuList.append(getConfigListEntry(_("Movie Folder"), getSourcePath(), _("Source folder / HDD\n\nPress 'Ok' to open path selection view")))
+        menuList.append(getConfigListEntry(_("Movie Folder Limit (in GB)"), config.plugins.MovieArchiver.sourceLimit, _("Movie Folder free diskspace limit in GB. If free diskspace reach under this limit, the MovieArchiver will move old records to the archive")))
+
+        if config.plugins.MovieArchiver.backup.getValue() == True:
+            menuList.append(getConfigListEntry(_("Exclude folders"),  config.plugins.MovieArchiver.excludeDirs, _("Selected Directories wont be backuped.")))
+
+        menuList.append(getConfigListEntry(_("-------------------------------------------------------------"), ))
+        menuList.append(getConfigListEntry(_("Archive Folder"), getTargetPath(), _("Target folder / HDD where the movies will moved or backuped.\n\nPress 'Ok' to open path selection view")))
+        menuList.append(getConfigListEntry(_("Archive Folder Limit (in GB)"), config.plugins.MovieArchiver.targetLimit, _("If limit is reach, no movies will anymore moved to the archive")))
+
+        return menuList
 
     # callback for path-browser
     def checkReadWriteDir(self, configElement):
@@ -182,7 +188,7 @@ class MovieArchiverView(ConfigListScreen, Screen):
             MovieLocationBox,
             _("Choose folder"),
             self.getCurrent().getValue(),
-            minFree = 100 # Same requirement as in Screens.TimerEntry
+            minFree = 100
         )
 
 
@@ -195,9 +201,8 @@ class MovieArchiverView(ConfigListScreen, Screen):
         if cur:
             self["help"].text = cur[2]
 
-    # for summary:
     def __changedEntry(self):
-        pass
+        self["config"].setList(self.getMenuItemList())
 
     def __onClose(self):
         NotificationController.getInstance().setView(None)
