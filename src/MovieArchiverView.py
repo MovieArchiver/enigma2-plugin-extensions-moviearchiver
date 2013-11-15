@@ -91,7 +91,7 @@ class MovieArchiverView(ConfigListScreen, Screen):
     def getMenuItemList(self):
         menuList = []
         menuList.append(getConfigListEntry(_("Archive automatically"), config.plugins.MovieArchiver.enabled, _("If yes, the MovieArchiver automatically moved or copied (if 'Backup Movies' is on) movies to archive folder if limit is reached")))
-        menuList.append(getConfigListEntry(_("Backup Movies instead of Archive"), config.plugins.MovieArchiver.backup, _("If yes, the movies will only be copy to the archive movie folder and not moved.\n\nCurrently for synchronize, it comparing only fileName and fileSize.")))
+        menuList.append(getConfigListEntry(_("Backup Movies instead of Archive"), config.plugins.MovieArchiver.backup, _("If yes, the movies will only be copy to the archive movie folder and not moved.\n\nCurrently for synchronize, it comparing only fileName and fileSize."), 'BACKUP'))
         menuList.append(getConfigListEntry(_("Skip archiving during records"), config.plugins.MovieArchiver.skipDuringRecords, _("If a record is in progress or start in the next minutes after a record, the archiver skipped till the next record")))
         menuList.append(getConfigListEntry(_("Show notification if archive limit reached"), config.plugins.MovieArchiver.showLimitReachedNotification, _("Show notification window message if 'Archive Movie Folder Limit' is reached")))
         menuList.append(getConfigListEntry(_("-------------------------------------------------------------"), ))
@@ -202,7 +202,11 @@ class MovieArchiverView(ConfigListScreen, Screen):
             self["help"].text = cur[2]
 
     def __changedEntry(self):
-        self["config"].setList(self.getMenuItemList())
+        cur = self["config"].getCurrent()
+        cur = cur and len(cur) > 3 and cur[3]
+        # change if type is BACKUP
+        if cur == "BACKUP":
+            self["config"].setList(self.getMenuItemList())
 
     def __onClose(self):
         NotificationController.getInstance().setView(None)
