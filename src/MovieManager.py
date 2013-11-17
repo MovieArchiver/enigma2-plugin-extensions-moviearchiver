@@ -45,7 +45,7 @@ SECONDS_NEXT_RECORD = 600 #10 mins
 INFO_MSG = "showAlert"
 
 # max tries (movies to move) after checkFreespace recursion will end
-MAX_TRIES = 30
+MAX_TRIES = 50
 
 # file extension to archive or backup
 MOVIE_EXTENSION_TO_ARCHIVE = (".ts", ".avi", ".mkv", ".mp4", ".iso")
@@ -114,9 +114,9 @@ class MovieManager(object):
                         break
 
                     # Target Disk: check if limit is reached if we move this file
-                    breakMoveNext = checkReachedLimitIfMoveFile(getTargetPathValue(), config.plugins.MovieArchiver.targetLimit.getValue(), moviesFileSize * -1)
+                    breakMoveNext = checkReachedLimitIfMoveFile(getTargetPathValue(), config.plugins.MovieArchiver.targetLimit.getValue(), moviesFileSize)
 
-                    if breakMoveNext:
+                    if breakMoveNext == False:
                         break
 
                     tries += 1
