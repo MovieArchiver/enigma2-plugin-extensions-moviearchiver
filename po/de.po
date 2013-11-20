@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MovieArchiver\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-14 01:18+0100\n"
-"PO-Revision-Date: 2013-11-14 01:18+0100\n"
+"POT-Creation-Date: 2013-11-20 01:13+0100\n"
+"PO-Revision-Date: 2013-11-20 15:32+0100\n"
 "Last-Translator: Sebastian\n"
 "Language-Team: svox <svox>\n"
 "Language: de\n"
@@ -41,11 +41,11 @@ msgstr "Nicht auswählen"
 msgid "Select"
 msgstr "Auswählen"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:94
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:104
 msgid "Archive automatically"
 msgstr "Automatisch Archivieren"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:94
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:104
 msgid ""
 "If yes, the MovieArchiver automatically moved or copied (if 'Backup Movies' "
 "is on) movies to archive folder if limit is reached"
@@ -53,11 +53,11 @@ msgstr ""
 "Filme werden automatisch auf die Archiv-Festplatte verschoben oder kopiert "
 "(wenn 'Backup Movies' an ist) sobald das Limit der Festplatte erreicht wurde"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:95
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:105
 msgid "Backup Movies instead of Archive"
 msgstr "Backup Movies anstatt sie zu Archivieren"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:95
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:105
 msgid ""
 "If yes, the movies will only be copy to the archive movie folder and not "
 "moved.\n"
@@ -70,11 +70,11 @@ msgstr ""
 "Zum synchronisieren wird derzeit nur der Dateiname und die Dateigröße "
 "verglichen."
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:96
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:106
 msgid "Skip archiving during records"
 msgstr "Während einer Aufnahme nicht Archivieren"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:96
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:106
 msgid ""
 "If a record is in progress or start in the next minutes after a record, the "
 "archiver skipped till the next record"
@@ -82,27 +82,27 @@ msgstr ""
 "Wenn eine Aufnahme läuft oder in nächster Zeit startet, wird der "
 "Archivierungsprozess übersprungen bis die nächste Aufnahme beendet wurde"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:97
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:107
 msgid "Show notification if archive limit reached"
 msgstr "Fenster anzeigen wenn Archiv Limit erreicht wurde"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:97
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:107
 msgid ""
 "Show notification window message if 'Archive Movie Folder Limit' is reached"
 msgstr ""
 "Benachrichtigung anzeigen wenn 'Movie Archiv-Festplatten Limit' erreicht "
 "wurde"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:98
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:105
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:108
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:115
 msgid "-------------------------------------------------------------"
 msgstr ""
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:99
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:109
 msgid "Movie Folder"
 msgstr "Movie Verzeichnis"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:99
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:109
 msgid ""
 "Source folder / HDD\n"
 "\n"
@@ -112,11 +112,11 @@ msgstr ""
 "\n"
 "'Ok' drücken um Verzeichnisbrowser zu öffnen"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:100
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:110
 msgid "Movie Folder Limit (in GB)"
 msgstr "Movie Festplatten Limit (in GB)"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:100
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:110
 msgid ""
 "Movie Folder free diskspace limit in GB. If free diskspace reach under this "
 "limit, the MovieArchiver will move old records to the archive"
@@ -125,19 +125,19 @@ msgstr ""
 "Festplattenplatz unter dieses Limit geraten, wird der MovieArchiver die "
 "ältesten Movies in das Archiv verschieben"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:103
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:113
 msgid "Exclude folders"
 msgstr "Verzeichnisse ausschließen"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:103
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:113
 msgid "Selected Directories wont be backuped."
 msgstr "Ausgewählte Verzeichnisse werden vom Backup ausgeschlossen."
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:106
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:116
 msgid "Archive Folder"
 msgstr "Archivverzeichnis"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:106
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:116
 msgid ""
 "Target folder / HDD where the movies will moved or backuped.\n"
 "\n"
@@ -148,16 +148,16 @@ msgstr ""
 "\n"
 "'Ok' drücken um Verzeichnissbrowser zu öffnen"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:107
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:117
 msgid "Archive Folder Limit (in GB)"
 msgstr "Archiv-Festplatte Limit (in GB)"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:107
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:117
 msgid "If limit is reach, no movies will anymore moved to the archive"
 msgstr ""
 "Wenn das angegebene Limit erreicht wurde, wird kein Movie mehr archiviert"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:121
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:131
 #, python-format
 msgid ""
 "The directory %s is not writable.\n"
@@ -166,11 +166,27 @@ msgstr ""
 "Das Verzeichnis %s ist nicht beschreibar.\n"
 "Bitte wählen Sie ein beschreibares Verzeichnis aus."
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:190
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:205
 msgid "Choose folder"
 msgstr "Verzeichnis auswählen"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:72
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:218
+msgid "Stop Backup"
+msgstr "Backup beenden"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:220
+msgid "Stop archiving"
+msgstr "Archivieren beenden"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:223
+msgid "Backup now!"
+msgstr "Backup starten"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieArchiverView.py:225
+msgid "Archive now!"
+msgstr "Jetzt archivieren!"
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:76
 msgid ""
 "Stop archiving!! Can't archive movies to the same hard drive!! Please change "
 "the paths in the MovieArchiver settings."
@@ -179,32 +195,28 @@ msgstr ""
 "Festplatte gestartet werden. Bitte geben Sie einen anderen Pfad in den "
 "MovieArchiver-Einstellungen  an."
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:76
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:80
 msgid "Skip archiving. A record is running or start in the next minutes."
 msgstr ""
 "Archivierung wird übersprungen da gerade eine Aufnahme läuft oder in den "
 "nächsten Minuten startet."
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:80
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:84
 msgid ""
 "Stop archiving! Can't archive movie because archive-harddisk limit reached!"
 msgstr ""
 "Archivierung konnte nicht gestartet werden weil das Limit des Movie Archivs "
 "erreicht wurde!"
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:124
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:136
 msgid "Start archiving."
 msgstr "Archivierung gestartet."
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:127
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:139
 msgid "limit not reached. Wait for next Event."
 msgstr "Limit noch nicht erreicht. Warte auf nächstes Event."
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:134
-msgid "Backup Archive. Synchronization started"
-msgstr "Backup Archiv. Synchronisierung wurde gestartet."
-
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:138
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:148
 msgid ""
 "Backup Target Folder is not writable.\n"
 "Please check the permission."
@@ -212,15 +224,23 @@ msgstr ""
 "Backup Verzeichnis ist nicht beschreibbar.\n"
 "Bitte Verzeichnis Zugriffsrechte überprüfen."
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:144
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:154
 msgid "No files for backup found."
 msgstr "Keine Dateien zum Backupen gefunden."
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/NotificationController.py:97
+#: /Users/sebastian/Projekte/MovieArchiver/src/MovieManager.py:157
+msgid "Backup Archive. Synchronization started"
+msgstr "Backup Archiv. Synchronisierung wurde gestartet."
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/NotificationController.py:82
+msgid "MovieArchiver: Stop Archiving."
+msgstr "MovieArchiver: Archivierung beendet."
+
+#: /Users/sebastian/Projekte/MovieArchiver/src/NotificationController.py:108
 msgid "MovieArchiver: Archiving finished."
 msgstr "MovieArchiver: Archivierung abgeschlossen."
 
-#: /Users/sebastian/Projekte/MovieArchiver/src/NotificationController.py:99
+#: /Users/sebastian/Projekte/MovieArchiver/src/NotificationController.py:110
 msgid "MovieArchiver: Movies already archived."
 msgstr "MovieArchiver: Filme sind bereits archiviert."
 
