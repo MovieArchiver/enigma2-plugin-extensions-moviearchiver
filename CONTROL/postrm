@@ -1,6 +1,10 @@
 #!/bin/sh
 rm -rf /usr/lib/enigma2/python/Plugins/Extensions/MovieArchiver
-echo "                                                          "
-echo "        ...MovieArchiver successful removed.              "
-echo "             Please restart enigma2 now.		            "
+echo "**************************************************"
+echo "                                                  "
+echo "...MovieArchiver successful removed.              "
+echo "                                                  "
+echo "Please restart enigma2 now.	                    "
+echo "                                                  "
+echo "**************************************************"
 exit 0
