@@ -75,7 +75,7 @@ def getFilesWithNameKey(path, excludedDirNames = None, excludeDirs = None):
 
             fullFilePath = os.path.join(dirPath, fileName)
 
-            skipFile = False;
+            skipFile = False
 
             if dirPath.endswith("/"):
                 pathToCheck = dirPath
@@ -85,7 +85,7 @@ def getFilesWithNameKey(path, excludedDirNames = None, excludeDirs = None):
             # skip, if path found in excludeDirs
             if excludeDirs is not None:
                 for excludeDir in excludeDirs:
-                    if pathToCheck[:len(excludeDir)] == pathToCheck:
+                    if pathToCheck[:len(excludeDir)] == excludeDir:
                         skipFile = True
                         break
 

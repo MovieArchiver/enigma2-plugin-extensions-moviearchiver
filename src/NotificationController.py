@@ -40,9 +40,9 @@ class NotificationController(object):
         Constructor
         '''
         self.view = None
+        self.showUIMessage = None
         self.movieManager = MovieManager()
         self.recordNotification = RecordNotification()
-        self.showUIMessage = None
 
     @staticmethod
     def getInstance():
@@ -75,7 +75,18 @@ class NotificationController(object):
 
         addEventListener(INFO_MSG, self.__infoMsgHandler)
 
-        self.movieManager.checkFreespace()
+        self.movieManager.startArchiving()
+
+    def stopArchiving(self):
+        self.movieManager.stopArchiving()
+        self.showMessage(_("MovieArchiver: Stop Archiving."), 5)
+
+    def isArchiving(self):
+        '''
+        returns true if currently archiving or backup is running
+        '''
+        return self.movieManager.running()
+
 
     def showMessage(self, msg, timeout=10):
         if self.view is not None:

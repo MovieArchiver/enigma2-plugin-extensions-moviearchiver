@@ -44,7 +44,7 @@ SECONDS_NEXT_RECORD = 600 #10 mins
 # show message window: body is msg, timeout
 INFO_MSG = "showAlert"
 
-# max tries (movies to move) after checkFreespace recursion will end
+# max tries (movies to move) after startArchiving recursion will end
 MAX_TRIES = 50
 
 # file extension to archive or backup
@@ -64,10 +64,14 @@ class MovieManager(object):
         '''
         self.execCommand = ""
         self.executionQueueList = deque()
+        self.executionQueueListInProgress = False;
         self.console = eConsoleAppContainer()
         self.console.appClosed.append(self.__runFinished)
 
-    def checkFreespace(self):
+    def running(self):
+        return self.executionQueueListInProgress
+
+    def startArchiving(self):
         if mountpoint(getSourcePathValue()) == mountpoint(getTargetPathValue()):
             dispatchEvent(INFO_MSG, _("Stop archiving!! Can't archive movies to the same hard drive!! Please change the paths in the MovieArchiver settings."), 10)
             return
@@ -90,6 +94,14 @@ class MovieManager(object):
             self.backupFiles(getSourcePathValue(), getTargetPathValue())
         else:
             self.archiveMovies()
+
+    def stopArchiving(self):
+        '''
+        current move or copy process doesnt canceled.
+        only queue is cleared
+        '''
+        if self.running():
+            self.__clearExecutionQueueList()
 
     def archiveMovies(self):
         '''
@@ -131,8 +143,6 @@ class MovieManager(object):
         sync files
         '''
 
-        dispatchEvent(INFO_MSG, _("Backup Archive. Synchronization started"), 5)
-
         #check if target path is writable
         if pathIsWriteable(targetPath) == False:
             dispatchEvent(INFO_MSG, _("Backup Target Folder is not writable.\nPlease check the permission."), 10)
@@ -143,6 +153,8 @@ class MovieManager(object):
         if sourceFiles is None:
             dispatchEvent(INFO_MSG, _("No files for backup found."), 10)
             return
+
+        dispatchEvent(INFO_MSG, _("Backup Archive. Synchronization started"), 5)
 
         targetFiles = getFilesWithNameKey(targetPath, excludedDirNames = DEFAULT_EXCLUDED_DIRNAMES)
 
@@ -189,12 +201,15 @@ class MovieManager(object):
     def execQueue(self):
         try:
             if len(self.executionQueueList) > 0:
+                self.executionQueueListInProgress = True;
+
                 self.execCommand = self.executionQueueList.popleft()
 
                 self.console.execute("sh -c " + self.execCommand)
 
                 printToConsole("execQueue: Move Movie '" + self.execCommand + "'")
         except Exception, e:
+            self.__clearExecutionQueueList();
             printToConsole("execQueue exception:\n" + str(e))
 
     def isRecordingStartInNextTime(self):
@@ -211,6 +226,11 @@ class MovieManager(object):
     Private Methods
     '''
 
+    def __clearExecutionQueueList(self):
+        self.execCommand = ""
+        self.executionQueueList = deque()
+        self.executionQueueListInProgress = False;
+
     def __runFinished(self, retval=None):
         try:
             self.execCommand = ""
@@ -219,14 +239,13 @@ class MovieManager(object):
                 self.execQueue()
             else:
                 printToConsole("Queue finished!")
+                self.executionQueueListInProgress = False;
                 dispatchEvent(QUEUE_FINISHED, True)
 
         except Exception, e:
+            self.__clearExecutionQueueList();
+
             printToConsole("runFinished exception:\n" + str(e))
-
-            self.execCommand = ""
-
-            self.executionQueueList = deque()
 
     def __addExecCommandToArchiveQueue(self, execCommandToAdd):
         '''

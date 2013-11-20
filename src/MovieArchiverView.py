@@ -28,13 +28,16 @@ from Components.config import config, configfile, getConfigListEntry, ConfigLoca
 from Components.ConfigList import ConfigListScreen
 from Components.Sources.StaticText import StaticText
 
+from MovieManager import QUEUE_FINISHED
 from DiskUtils import pathIsWriteable
 from NotificationController import NotificationController
 from . import _, getSourcePath, getTargetPath
 from ExcludeDirsView import ExcludeDirsView
+from EventDispatcher import addEventListener
 
 
 #######################################################################
+#    <eLabel font="Regular; 20" foregroundColor="unffffff" backgroundColor="#20000000" halign="left" position="442,405" size="250,33" text="Archive now!" transparent="1" />
 
 class MovieArchiverView(ConfigListScreen, Screen):
     skin = """
@@ -42,14 +45,14 @@ class MovieArchiverView(ConfigListScreen, Screen):
     <eLabel name="new eLabel" position="0,0" zPosition="-2" size="630,440" backgroundColor="#20000000" transparent="0" />
     <eLabel font="Regular; 20" foregroundColor="unffffff" backgroundColor="#20000000" halign="left" position="37,405" size="250,33" text="Cancel" transparent="1" />
     <eLabel font="Regular; 20" foregroundColor="unffffff" backgroundColor="#20000000" halign="left" position="235,405" size="250,33" text="Save" transparent="1" />
-    <eLabel font="Regular; 20" foregroundColor="unffffff" backgroundColor="#20000000" halign="left" position="442,405" size="250,33" text="Archive now!" transparent="1" />
+    <widget source="archiveButton" font="Regular; 20" render="Label" foregroundColor="unffffff" backgroundColor="#20000000" halign="left" position="432,405" size="250,33" transparent="1" />
     <widget name="config" position="21,74" size="590,300" scrollbarMode="showOnDemand" transparent="1" />
     <eLabel name="new eLabel" position="640,0" zPosition="-2" size="360,440" backgroundColor="#20000000" transparent="0" />
     <widget source="help" render="Label" position="660,74" size="320,400" font="Regular;20" />
     <eLabel position="660,15" size="360,50" text="Help" font="Regular; 40" valign="center" transparent="1" backgroundColor="#20000000" />
     <eLabel position="20,15" size="348,50" text="MovieArchiver" font="Regular; 40" valign="center" transparent="1" backgroundColor="#20000000" />
     <eLabel position="303,18" size="349,50" text="Setup" foregroundColor="unffffff" font="Regular; 30" valign="center" backgroundColor="#20000000" transparent="1" halign="left" />
-    <eLabel position="425,400" size="5,40" backgroundColor="#e5dd00" />
+    <eLabel position="415,400" size="5,40" backgroundColor="#e5dd00" />
     <eLabel position="220,400" size="5,40" backgroundColor="#61e500" />
     <eLabel position="20,400" size="5,40" backgroundColor="#e61700" />
     <eLabel text="by svox" position="42,8" size="540,25" zPosition="1" font="Regular; 15" halign="right" valign="top" backgroundColor="#20000000" transparent="1" />
@@ -71,7 +74,9 @@ class MovieArchiverView(ConfigListScreen, Screen):
             on_change = self.__changedEntry
         )
 
-        NotificationController.getInstance().setView(self)
+        self.notificationController = NotificationController.getInstance();
+
+        self.notificationController.setView(self)
 
         # Define Actions
         self["actions"] = ActionMap(["SetupActions", "OkCancelActions", "ColorActions"],
@@ -85,6 +90,12 @@ class MovieArchiverView(ConfigListScreen, Screen):
 
         self["config"].onSelectionChanged.append(self.__updateHelp)
         self["help"] = StaticText()
+        self["archiveButton"] = StaticText()
+
+        self.__updateArchiveNowButtonText()
+
+        if self.notificationController.isArchiving() == True:
+            addEventListener(QUEUE_FINISHED, self.__archiveFinished)
 
         self.onClose.append(self.__onClose)
 
@@ -123,7 +134,12 @@ class MovieArchiverView(ConfigListScreen, Screen):
             return False
 
     def yellow(self):
-        NotificationController.getInstance().startArchiving(True)
+        if self.notificationController.isArchiving() == True:
+            self.notificationController.stopArchiving()
+        else:
+            self.notificationController.startArchiving(True)
+
+        self.__updateArchiveNowButtonText()
 
     def excludedDirsChoosen(self, ret):
         config.plugins.MovieArchiver.excludeDirs.save()
@@ -161,9 +177,9 @@ class MovieArchiverView(ConfigListScreen, Screen):
                 pass
 
         if config.plugins.MovieArchiver.enabled.getValue():
-            NotificationController.getInstance().start()
+            self.notificationController.start()
         else:
-            NotificationController.getInstance().stop()
+            self.notificationController.stop()
 
         configfile.save()
         self.close()
@@ -196,6 +212,23 @@ class MovieArchiverView(ConfigListScreen, Screen):
     Private Methods
     '''
 
+    def __updateArchiveNowButtonText(self):
+        if self.notificationController.isArchiving() == True:
+            if config.plugins.MovieArchiver.backup.getValue() == True:
+                archiveButtonText = _("Stop Backup")
+            else:
+                archiveButtonText = _("Stop archiving")
+        else:
+            if config.plugins.MovieArchiver.backup.getValue() == True:
+                archiveButtonText = _("Backup now!")
+            else:
+                archiveButtonText = _("Archive now!")
+
+        self["archiveButton"].setText(archiveButtonText)
+
+    def __archiveFinished(self):
+        self.__updateArchiveNowButtonText()
+
     def __updateHelp(self):
         cur = self["config"].getCurrent()
         if cur:
@@ -209,5 +242,5 @@ class MovieArchiverView(ConfigListScreen, Screen):
             self["config"].setList(self.getMenuItemList())
 
     def __onClose(self):
-        NotificationController.getInstance().setView(None)
+        self.notificationController.setView(None)
 
