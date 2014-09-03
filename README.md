@@ -32,14 +32,9 @@ Deaktiviert kann der MovieArchiver auch manuel über die Einstellungsseite gesta
 Wichtig:
 - Nutzung des Scripts auf eigene Gefahr!
 
-
 Zu Testen:
 - Was passiert wenn der EMC offen ist während eine Archivierung im Hintergrund gestartet wird?
-	- aktualisiert sich die Ansicht von alleine?
 - Was passiert wenn eine Aufnahme gerade abgespielt wird die im Hintergrund archiviert werden soll?
-	- bricht die Archivierung ab?
-- Wie ist das Verhalten auf anderen Receivern (bisher nur auf Gigablue Quad getestet)?
-
 
 Bisher getestet auf folgenden Images/Receivern:
 - openATV / Gigablue Quad

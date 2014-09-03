@@ -61,6 +61,6 @@ def main(session, **kwargs):
 def Plugins(**kwargs):
 	pluginList = [
 		PluginDescriptor(where = PluginDescriptor.WHERE_AUTOSTART, fnc=autostart, needsRestart=False),
-		PluginDescriptor(name="MovieArchiver", description=_("Configuration tool for MovieArchiver"), where = PluginDescriptor.WHERE_PLUGINMENU, icon="plugin.png", fnc=main, needsRestart = False)
+		PluginDescriptor(name="MovieArchiver", description=_("Archive or backup your movies"), where = PluginDescriptor.WHERE_PLUGINMENU, icon="plugin.png", fnc=main, needsRestart = False)
 	]
 	return pluginList

@@ -75,7 +75,6 @@ class MovieArchiverView(ConfigListScreen, Screen):
         )
 
         self.notificationController = NotificationController.getInstance();
-
         self.notificationController.setView(self)
 
         # Define Actions
@@ -88,7 +87,12 @@ class MovieArchiverView(ConfigListScreen, Screen):
             }, -2
         )
 
-        self["config"].onSelectionChanged.append(self.__updateHelp)
+        try:
+            if not self.selectionChanged in self["config"].onSelectionChanged:
+                self["config"].onSelectionChanged.append(self.__updateHelp)
+        except:
+            self["config"].onSelectionChanged.append(self.__updateHelp)
+
         self["help"] = StaticText()
         self["archiveButton"] = StaticText()
 
@@ -156,6 +160,8 @@ class MovieArchiverView(ConfigListScreen, Screen):
             ConfigListScreen.keyOK(self)
 
     def cancel(self):
+        self.clean()
+
         for x in self["config"].list:
             if len(x) > 1:
                 x[1].cancel()
@@ -165,13 +171,18 @@ class MovieArchiverView(ConfigListScreen, Screen):
         self.close()
 
     def save(self):
+        self.clean()
+
         for x in self["config"].list:
             if len(x) > 1:
                 # skip ConfigLocations because it doesnt accept default = None
                 # All other forms override default and force to save values that
                 # wasnt changed by user
+                '''
                 if isinstance(x[1], ConfigLocations) == False:
                     x[1].default = None
+                '''
+                x[1].save_forced = True
                 x[1].save()
             else:
                 pass
@@ -183,6 +194,10 @@ class MovieArchiverView(ConfigListScreen, Screen):
 
         configfile.save()
         self.close()
+
+    def clean(self):
+        getSourcePath().clearNotifiers()
+        getTargetPath().clearNotifiers()
 
 #############################################################
 
